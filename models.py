@@ -1,6 +1,8 @@
 from torch import nn
 import torch
 
+device='cuda' if torch.cuda.is_available() else 'cpu'
+
 class MyModel(nn.Module):
     def __init__(self):
         super().__init__()
@@ -23,8 +25,12 @@ class MyModel(nn.Module):
 def test_accuracy(model,dataloader):
     n_currects=0
 
+    model.to(device)
     model.eval()
     for image_batch, label_batch in dataloader:
+        image_batch=image_batch.to(device)
+        label_batch=label_batch.to(device)
+        
         with torch.no_grad():
             logits_batch=model(image_batch)
 
@@ -37,8 +43,11 @@ def test_accuracy(model,dataloader):
 
 
 def train(model, dataloader, loss_fn, optimizer):
+    model.to(device)
     model.train()
     for image_batch, label_batch in dataloader:
+        image_batch=image_batch.to(device)
+        label_batch=label_batch.to(device)
         logits_batch=model(image_batch)
 
         loss=loss_fn(logits_batch, label_batch)
@@ -53,8 +62,12 @@ def train(model, dataloader, loss_fn, optimizer):
 def test(model, dataloader, loss_fn):
     loss_total=0.0
     
+    model.to(device)
     model.eval()
     for image_batch, label_batch in dataloader:
+        image_batch=image_batch.to(device)
+        label_batch=label_batch.to(device)
+        
         with torch.no_grad():
             logits_batch=model(image_batch)
 
