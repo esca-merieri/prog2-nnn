@@ -1,8 +1,8 @@
 import time 
-import matplotlib.pyplot as plt # type: ignore
-import torch # type: ignore
-from torchvision import datasets # type: ignore
-import torchvision.transforms.v2 as transforms # type: ignore
+import matplotlib.pyplot as plt 
+import torch 
+from torchvision import datasets 
+import torchvision.transforms.v2 as transforms 
 import models
 
 ds_transform=transforms.Compose((
@@ -62,9 +62,11 @@ acc_test_history=[]
 for k in range(n_epochs):
     print(f'epoch{k+1}/{n_epochs}',end=': ', flush=True)
     
+    time_start=time.time()
     loss_train=models.train(model, dataloader_train, loss_fn, optimizer)
+    time_end=time.time()
     loss_train_history.append(loss_train)
-    print(f'train loss:{loss_train:.3f}',end=', ')
+    print(f'train loss:{loss_train:.3f} ({time_end-time_start}s)',end=', ')
 
     loss_test=models.test(model,dataloader_test, loss_fn)
     loss_test_history.append(loss_test)
